@@ -1,11 +1,18 @@
 package com.stdio.incomeandexpenseplanner;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -17,11 +24,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
     private MainAdapter mAdapter;
     private RecyclerTouchListener onTouchListener;
     public static ArrayList<DataModel> list = new ArrayList<>();
+    DBExpenses dbExpenses;
+    public static SQLiteDatabase database;
+    public static String taskName;
+    public static String taskCategory;
+    public static int taskID;
+    public static String taskCost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbExpenses = new DBExpenses(this);
+        database = dbExpenses.getWritableDatabase();
 
         getData();
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -59,9 +74,70 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
     }
 
     private void getData() {
-        for (int i =0; i < 20; i++) {
-            list.add(new DataModel("name " + i, "category " + i, i, "date " + i, "cost " + i, "month " + i));
+        list = new ArrayList();
+
+        Cursor cursor = database.query(DBExpenses.TABLE_EXPENSES, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int nameIndex = cursor.getColumnIndex(DBExpenses.KEY_NAME);
+            int categoryIndex = cursor.getColumnIndex(DBExpenses.KEY_CATEGORY);
+            int idIndex = cursor.getColumnIndex(DBExpenses.KEY_ID);
+            int dateIndex = cursor.getColumnIndex(DBExpenses.KEY_DATE);
+            int costIndex = cursor.getColumnIndex(DBExpenses.KEY_COST);
+            do {
+                taskName = cursor.getString(nameIndex);
+                taskCategory = cursor.getString(categoryIndex);
+                taskID = cursor.getInt(idIndex);
+                taskCost = cursor.getString(costIndex);
+                list.add(new DataModel(taskName, taskCategory, taskID, cursor.getString(dateIndex), taskCost, ""));
+            } while (cursor.moveToNext());
+        } else {
+            cursor.close();
         }
+    }
+
+    public void deleteItem(Context context, final int position) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+//        // set title
+//        alertDialogBuilder.setTitle("Delete item");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Вы действительно хотите удалить?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        list.remove(position);
+                        mAdapter.removeItem(position);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialogBuilder.setCancelable(true);
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    public void onClick (View view) {
+        startActivity(new Intent(this, AddExpensesActivity.class));
+    }
+
+    public void IntentToStatistic(View view) {
+        //startActivity(new Intent(this, ExpensesStatisticActivity.class));
     }
 
     @Override

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">IncomeAndExpensePlanner</string>
+
+    <string-array name="categoriesForExpenses">
+        <item>Хобби</item>
+        <item>Еда</item>
+        <item>Одежда</item>
+        <item>Учёба</item>
+    </string-array>
 </resources>
