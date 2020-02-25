@@ -128,11 +128,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
                     public void onRowClicked(int position) {
                         Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                     }
-
-                    @Override
-                    public void onIndependentViewClicked(int independentViewID, int position) {
-                        //Toast.makeText(MainActivity.this, "Button in row " + (position + 1) + " clicked!", Toast.LENGTH_SHORT).show();
-                    }
                 })).setLongClickable(true, (new RecyclerTouchListener.OnRowLongClickListener() {
             public void onRowLongClicked(int position) {
                 Toast.makeText(MainActivity.this, "Row " + (position + 1) + " long clicked!", Toast.LENGTH_SHORT).show();

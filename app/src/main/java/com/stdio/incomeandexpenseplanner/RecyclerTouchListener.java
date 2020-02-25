@@ -749,8 +749,6 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener, 
                     else if (clickable && !bgVisible && touchedPosition >= 0 && !unClickableRows.contains(touchedPosition)
                             && !isIndependentViewClicked(motionEvent) && !isRViewScrolling) {
                         final int independentViewID = getIndependentViewID(motionEvent);
-                        if (independentViewID >= 0)
-                            mRowClickListener.onIndependentViewClicked(independentViewID, touchedPosition);
                     }
                     // On Click listener for background options
                     else if (swipeable && bgVisible && !fgPartialViewClicked) {
@@ -918,7 +916,6 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener, 
     public interface OnRowClickListener {
         void onRowClicked(int position);
 
-        void onIndependentViewClicked(int independentViewID, int position);
     }
 
     public interface OnRowLongClickListener {

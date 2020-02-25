@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public  class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
-    LayoutInflater inflater;
-    List<DataModel> modelList;
+    private LayoutInflater inflater;
+    private List<DataModel> modelList;
 
-    public MainAdapter(Context context, List<DataModel> list) {
+    MainAdapter(Context context, List<DataModel> list) {
         inflater = LayoutInflater.from(context);
         modelList = new ArrayList<>(list);
     }
@@ -31,7 +31,7 @@ public  class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolde
         holder.bindData(modelList.get(position));
     }
 
-    public void removeItem(int position) {
+    void removeItem(int position) {
         new MainActivity().getDatabase().execSQL("DELETE FROM expenses "+" where _id='"+modelList.get(position).id+"';");
         modelList.remove(position);
         notifyItemRemoved(position);
@@ -46,14 +46,14 @@ public  class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolde
 
         TextView mainText, subText, costText;
 
-        public MainViewHolder(View itemView) {
+        MainViewHolder(View itemView) {
             super(itemView);
             mainText = itemView.findViewById(R.id.name);
             subText =  itemView.findViewById(R.id.description);
             costText =  itemView.findViewById(R.id.price);
         }
 
-        public void bindData(DataModel expensesList) {
+        void bindData(DataModel expensesList) {
             mainText.setText(expensesList.getName());
             subText.setText(expensesList.getCategory());
             costText.setText(expensesList.getCost() + "р.");
