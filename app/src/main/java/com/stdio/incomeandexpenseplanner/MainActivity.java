@@ -18,18 +18,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements RecyclerTouchListener.RecyclerTouchListenerHelper{
+public class MainActivity extends AppCompatActivity implements RecyclerTouchListener.RecyclerTouchListenerHelper {
 
     private OnActivityTouchListener touchListener;
+    RecyclerTouchListener onTouchListener;
     private RecyclerView mRecyclerView;
     private MainAdapter mAdapter;
     public static ArrayList<DataModel> list = new ArrayList<>();
     DBExpenses dbExpenses;
     private static SQLiteDatabase database;
-    public static String taskName;
-    public static String taskCategory;
-    public static int taskID;
-    public static String taskCost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,37 +36,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
         database = dbExpenses.getWritableDatabase();
 
         getData();
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerTouchListener onTouchListener = new RecyclerTouchListener(this, mRecyclerView);
-        onTouchListener
-                .setClickable((new RecyclerTouchListener.OnRowClickListener() {
-                    @Override
-                    public void onRowClicked(int position) {
-                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                    }
 
-                    @Override
-                    public void onIndependentViewClicked(int independentViewID, int position) {
-                        //Toast.makeText(MainActivity.this, "Button in row " + (position + 1) + " clicked!", Toast.LENGTH_SHORT).show();
-                    }
-                })).setLongClickable(true, (new RecyclerTouchListener.OnRowLongClickListener() {
-            public void onRowLongClicked(int position) {
-                Toast.makeText(MainActivity.this, "Row " + (position + 1) + " long clicked!", Toast.LENGTH_SHORT).show();
-            }
-        })).setSwipeOptionViews(R.id.add, R.id.edit, R.id.change).setSwipeable(R.id.rowFG, R.id.rowBG, (new RecyclerTouchListener.OnSwipeOptionsClickListener() {
-            public void onSwipeOptionClicked(int viewID, int position) {
-                if (viewID == R.id.add) {
-                    Toast.makeText(MainActivity.this, "add " + position, Toast.LENGTH_SHORT).show();
-                } else if (viewID == R.id.edit) {
-                    Toast.makeText(MainActivity.this, "edit " + position, Toast.LENGTH_SHORT).show();
-                }
-                else if (viewID == R.id.change) {
-                    deleteItem(MainActivity.this, position);
-                }
-            }
-        }));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        initRecyclerView();
+        initRecyclerTouchListener();
         setRecyclerViewAdapter();
         mRecyclerView.addOnItemTouchListener(onTouchListener);
     }
@@ -137,12 +106,48 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
         super.onPostResume();
     }
 
-    public void onClick (View view) {
+    public void onClick(View view) {
         startActivity(new Intent(this, AddExpensesActivity.class));
     }
 
     public void IntentToStatistic(View view) {
         startActivity(new Intent(this, ExpensesStatisticActivity.class));
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    }
+
+    private void initRecyclerTouchListener() {
+        onTouchListener = new RecyclerTouchListener(this, mRecyclerView);
+        onTouchListener
+                .setClickable((new RecyclerTouchListener.OnRowClickListener() {
+                    @Override
+                    public void onRowClicked(int position) {
+                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onIndependentViewClicked(int independentViewID, int position) {
+                        //Toast.makeText(MainActivity.this, "Button in row " + (position + 1) + " clicked!", Toast.LENGTH_SHORT).show();
+                    }
+                })).setLongClickable(true, (new RecyclerTouchListener.OnRowLongClickListener() {
+            public void onRowLongClicked(int position) {
+                Toast.makeText(MainActivity.this, "Row " + (position + 1) + " long clicked!", Toast.LENGTH_SHORT).show();
+            }
+        })).setSwipeOptionViews(R.id.add, R.id.edit, R.id.change).setSwipeable(R.id.rowFG, R.id.rowBG, (new RecyclerTouchListener.OnSwipeOptionsClickListener() {
+            public void onSwipeOptionClicked(int viewID, int position) {
+                if (viewID == R.id.add) {
+                    Toast.makeText(MainActivity.this, "add " + position, Toast.LENGTH_SHORT).show();
+                } else if (viewID == R.id.edit) {
+                    Toast.makeText(MainActivity.this, "edit " + position, Toast.LENGTH_SHORT).show();
+                } else if (viewID == R.id.change) {
+                    deleteItem(MainActivity.this, position);
+                }
+            }
+        }));
     }
 
     @Override
