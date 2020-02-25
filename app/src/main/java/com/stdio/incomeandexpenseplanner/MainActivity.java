@@ -22,10 +22,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
     private OnActivityTouchListener touchListener;
     private RecyclerView mRecyclerView;
     private MainAdapter mAdapter;
-    private RecyclerTouchListener onTouchListener;
     public static ArrayList<DataModel> list = new ArrayList<>();
     DBExpenses dbExpenses;
-    public static SQLiteDatabase database;
+    private static SQLiteDatabase database;
     public static String taskName;
     public static String taskCategory;
     public static int taskID;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
         getData();
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        onTouchListener = new RecyclerTouchListener(this, mRecyclerView);
+        RecyclerTouchListener onTouchListener = new RecyclerTouchListener(this, mRecyclerView);
         onTouchListener
                 .setClickable((new RecyclerTouchListener.OnRowClickListener() {
                     @Override
@@ -101,37 +100,38 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
     public void deleteItem(Context context, final int position) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
-
-//        // set title
-//        alertDialogBuilder.setTitle("Delete item");
-
-        // set dialog message
         alertDialogBuilder
                 .setMessage("Вы действительно хотите удалить?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // if this button is clicked, close
-                        // current activity
                         list.remove(position);
                         mAdapter.removeItem(position);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
                         dialog.cancel();
                     }
                 });
 
         alertDialogBuilder.setCancelable(true);
-
-        // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
         alertDialog.show();
+    }
+
+    public SQLiteDatabase getDatabase() {
+        return database;
+    }
+
+    @Override
+    protected void onPostResume() {
+        AddExpensesActivity addExpensesActivity = new AddExpensesActivity();
+        if (addExpensesActivity.getExpensesIsAdded()) {
+            addExpensesActivity.setExpensesIsAdded(false);
+            recreate();
+        }
+        super.onPostResume();
     }
 
     public void onClick (View view) {

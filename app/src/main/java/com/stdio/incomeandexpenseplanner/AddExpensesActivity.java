@@ -22,7 +22,7 @@ public class AddExpensesActivity extends AppCompatActivity {
     EditText etExpensesName;
     EditText etCost;
     Spinner spinner;
-    public static boolean expensesIsAdded = false;
+    private static boolean expensesIsAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +57,16 @@ public class AddExpensesActivity extends AppCompatActivity {
             contentValues.put(DBExpenses.KEY_MONTH, new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
             System.out.println(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
             System.out.println(new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
-            MainActivity.database.insert(DBExpenses.TABLE_EXPENSES, null, contentValues);
-            Toast.makeText(getApplicationContext(), "Задача успешно добавлена", Toast.LENGTH_SHORT).show();
+            new MainActivity().getDatabase().insert(DBExpenses.TABLE_EXPENSES, null, contentValues);
             expensesIsAdded = true;
             finish();
+    }
+
+    public boolean getExpensesIsAdded() {
+        return  expensesIsAdded;
+    }
+
+    public void setExpensesIsAdded(boolean b) {
+        expensesIsAdded = b;
     }
 }
