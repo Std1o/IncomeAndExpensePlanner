@@ -32,6 +32,7 @@ public  class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolde
     }
 
     public void removeItem(int position) {
+        MainActivity.database.execSQL("DELETE FROM expenses "+" where _id='"+modelList.get(position).id+"';");
         modelList.remove(position);
         // notify the item removed by position
         // to perform recycler view delete animations

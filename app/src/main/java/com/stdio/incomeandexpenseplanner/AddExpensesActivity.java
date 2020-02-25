@@ -23,8 +23,6 @@ public class AddExpensesActivity extends AppCompatActivity {
     EditText etCost;
     Spinner spinner;
     public static boolean expensesIsAdded = false;
-    final DateFormat day = new SimpleDateFormat("dd");
-    final DateFormat taskMonth = new SimpleDateFormat("mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +50,13 @@ public class AddExpensesActivity extends AppCompatActivity {
         expensesCost = etCost.getText().toString();
         expensesName = etExpensesName.getText().toString();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(DBExpenses.KEY_DATE, day.format(Calendar.getInstance().getTime()));
+            contentValues.put(DBExpenses.KEY_DATE, new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
             contentValues.put(DBExpenses.KEY_NAME, expensesName);
             contentValues.put(DBExpenses.KEY_CATEGORY, expensesCategory);
             contentValues.put(DBExpenses.KEY_COST, expensesCost);
-            contentValues.put(DBExpenses.KEY_MONTH, taskMonth.format(Calendar.getInstance().getTime()));
+            contentValues.put(DBExpenses.KEY_MONTH, new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
+            System.out.println(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime()));
+            System.out.println(new SimpleDateFormat("MM").format(Calendar.getInstance().getTime()));
             MainActivity.database.insert(DBExpenses.TABLE_EXPENSES, null, contentValues);
             Toast.makeText(getApplicationContext(), "Задача успешно добавлена", Toast.LENGTH_SHORT).show();
             expensesIsAdded = true;

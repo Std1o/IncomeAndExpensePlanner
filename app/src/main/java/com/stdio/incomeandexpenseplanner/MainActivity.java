@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
                     Toast.makeText(MainActivity.this, "edit " + position, Toast.LENGTH_SHORT).show();
                 }
                 else if (viewID == R.id.change) {
-                    Toast.makeText(MainActivity.this, "change " + position, Toast.LENGTH_SHORT).show();
+                    deleteItem(MainActivity.this, position);
                 }
             }
         }));
@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
                 taskCategory = cursor.getString(categoryIndex);
                 taskID = cursor.getInt(idIndex);
                 taskCost = cursor.getString(costIndex);
+                System.out.println(cursor.getString(dateIndex));
+                System.out.println(cursor.getString(cursor.getColumnIndex(DBExpenses.KEY_MONTH)));
                 list.add(new DataModel(taskName, taskCategory, taskID, cursor.getString(dateIndex), taskCost, ""));
             } while (cursor.moveToNext());
         } else {
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
     }
 
     public void IntentToStatistic(View view) {
-        //startActivity(new Intent(this, ExpensesStatisticActivity.class));
+        startActivity(new Intent(this, ExpensesStatisticActivity.class));
     }
 
     @Override
