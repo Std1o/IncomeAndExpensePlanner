@@ -1,20 +1,15 @@
 package com.stdio.incomeandexpenseplanner;
 
 public class DataModel {
-    String name;
-    String category;
-    int id;
-    String date;
-    String cost;
-    String month;
 
-    DataModel(String name, String category, int id, String date, String cost, String month) {
-        this.name = name;
-        this.category = category;
-        this.id = id;
-        this.date = date;
-        this.cost = cost;
-        this.month = month;
+    private String name;
+    private String category;
+    int id;
+    private String cost;
+    private String date;
+    private String month;
+
+    DataModel() {
     }
 
     public String getName() {
@@ -25,13 +20,31 @@ public class DataModel {
         return category;
     }
 
-
-    public String getDate() {
-        return date;
-    }
-
     public String getCost() {
         return cost;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
 }

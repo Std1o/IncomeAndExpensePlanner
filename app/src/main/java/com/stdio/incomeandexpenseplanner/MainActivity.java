@@ -83,16 +83,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
             int nameIndex = cursor.getColumnIndex(DBExpenses.KEY_NAME);
             int categoryIndex = cursor.getColumnIndex(DBExpenses.KEY_CATEGORY);
             int idIndex = cursor.getColumnIndex(DBExpenses.KEY_ID);
-            int dateIndex = cursor.getColumnIndex(DBExpenses.KEY_DATE);
             int costIndex = cursor.getColumnIndex(DBExpenses.KEY_COST);
+            int dateIndex = cursor.getColumnIndex(DBExpenses.KEY_DATE);
+            int monthIndex = cursor.getColumnIndex(DBExpenses.KEY_MONTH);
             do {
-                taskName = cursor.getString(nameIndex);
-                taskCategory = cursor.getString(categoryIndex);
-                taskID = cursor.getInt(idIndex);
-                taskCost = cursor.getString(costIndex);
-                System.out.println(cursor.getString(dateIndex));
-                System.out.println(cursor.getString(cursor.getColumnIndex(DBExpenses.KEY_MONTH)));
-                list.add(new DataModel(taskName, taskCategory, taskID, cursor.getString(dateIndex), taskCost, ""));
+                DataModel dataModel = new DataModel();
+                dataModel.setName(cursor.getString(nameIndex));
+                dataModel.setCategory(cursor.getString(categoryIndex));
+                dataModel.setId(cursor.getInt(idIndex));
+                dataModel.setCost(cursor.getString(costIndex));
+                dataModel.setDate(cursor.getString(dateIndex));
+                dataModel.setMonth(cursor.getString(monthIndex));
+                list.add(dataModel);
             } while (cursor.moveToNext());
         } else {
             cursor.close();
