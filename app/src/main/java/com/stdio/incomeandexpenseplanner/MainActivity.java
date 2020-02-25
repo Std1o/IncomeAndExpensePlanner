@@ -2,6 +2,7 @@ package com.stdio.incomeandexpenseplanner;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
                 }
             }
         }));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         setRecyclerViewAdapter();
         mRecyclerView.addOnItemTouchListener(onTouchListener);
     }
@@ -126,9 +128,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
 
     @Override
     protected void onPostResume() {
-        AddExpensesActivity addExpensesActivity = new AddExpensesActivity();
-        if (addExpensesActivity.getExpensesIsAdded()) {
-            addExpensesActivity.setExpensesIsAdded(false);
+        if (AddExpensesActivity.isExpensesAdded()) {
+            AddExpensesActivity.setExpensesAdded(false);
             recreate();
         }
         super.onPostResume();
