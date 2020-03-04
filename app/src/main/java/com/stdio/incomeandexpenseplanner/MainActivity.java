@@ -98,12 +98,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerTouchList
     }
 
     @Override
-    protected void onPostResume() {
+    protected void onResume() {
+        super.onResume();
         if (AddExpensesActivity.isExpensesAdded()) {
             AddExpensesActivity.setExpensesAdded(false);
-            recreate();
+            getData();
+            initRecyclerTouchListener();
+            setRecyclerViewAdapter();
+            mRecyclerView.addOnItemTouchListener(onTouchListener);
         }
-        super.onPostResume();
     }
 
     public void onClick(View view) {
